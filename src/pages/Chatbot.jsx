@@ -173,7 +173,7 @@ const Chatbot = () => {
   };
 
 
-  const { speak, cancel, voices }  = useSpeechSynthesis({
+  const { speak, cancel, voices } = useSpeechSynthesis({
     onEnd: () => setIsSpeaking(false),
   });
   const speakHandler = () => {
@@ -194,9 +194,15 @@ const Chatbot = () => {
     setIsSpeaking(false);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     stopSpeakingHandler();
-  },[rate])
+  }, [rate])
+
+  useEffect(() => {
+    const audio = new Audio("/audio.mp3");
+    audio.play().catch(err => console.log("Autoplay blocked:", err));
+  }, []);
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-900 text-white p-4">
@@ -204,7 +210,7 @@ const Chatbot = () => {
       {/* Tab Section */}
       <div className="w-full flex flex-wrap justify-center gap-4 p-4 bg-gray-800 rounded-lg mb-6">
         <select
-          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48"
+          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48 z-10"
           value={classLevel}
           onChange={(e) => setClassLevel(e.target.value)}
         >
@@ -215,7 +221,7 @@ const Chatbot = () => {
           <option>Class 12</option> */}
         </select>
         <select
-          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48"
+          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48 z-10"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         >
@@ -225,7 +231,7 @@ const Chatbot = () => {
           <option>Social Studies</option> */}
         </select>
         <select
-          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48"
+          className="p-2 rounded bg-gray-700 text-white w-40 sm:w-48 z-10"
           value={board}
           onChange={(e) => setBoard(e.target.value)}
         >
@@ -270,23 +276,24 @@ const Chatbot = () => {
         {showProgress && <ProgressModal progress={progress} subject={subject} onClose={() => setShowProgress(false)} />}
 
         {/* Stars */}
-        {[...Array(100)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full opacity-50 z-0"
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{
-              duration: Math.random() * 2 + 1,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            style={{
-              top: `${Math.random() * 100}vh`,
-              left: `${Math.random() * 100}vw`,
-            }}
-          />
-        ))}
-
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-2">
+          {[...Array(100)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full opacity-50"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{
+                duration: Math.random() * 2 + 1,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                top: `${Math.random() * 100}vh`,
+                left: `${Math.random() * 100}vw`,
+              }}
+            />
+          ))}
+        </div>
 
         <motion.h2
           className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-green-500 drop-shadow-lg"
@@ -325,7 +332,7 @@ const Chatbot = () => {
 
 
           {/* User Section */}
-          <div className="box b border border-gray-700 w-full md:w-1/3 flex flex-col items-center gap-6 p-4 bg-gray-800 rounded-lg shadow-lg sm:w-full min-w-[250px] ">
+          <div className="box b border border-gray-700 w-full md:w-1/3 flex flex-col items-center gap-6 p-4 bg-gray-800 rounded-lg shadow-lg sm:w-full min-w-[250px] z-10">
 
 
             <div className="flex justify-center items-center h-40 md:h-56 w-40 md:w-56">
@@ -352,7 +359,7 @@ const Chatbot = () => {
           </div>
 
           {/* Chatbot Section */}
-          <div className="box a h-210 border border-gray-700 w-full md:w-2/3 flex flex-col items-center gap-6 p-4 bg-gray-800 rounded-lg shadow-lg sm:w-full min-w-[350px]">
+          <div className="box a h-210 border border-gray-700 w-full md:w-2/3 flex flex-col items-center gap-6 p-4 bg-gray-800 rounded-lg shadow-lg sm:w-full min-w-[350px] z-10">
 
 
             {/* Animation Section */}
@@ -389,7 +396,7 @@ const Chatbot = () => {
 
               {/* Buttons (Fixed Position) */}
               <div className="w-full flex gap-6 mt-4 justify-center">
-                <button className={` ${isSpeaking ?"px-4" :"px-5" } py-2  bg-blue-400 text-white rounded-md hover:bg-blue-200 transition-all ${isSpeaking ? 'bg-green-500 hover:bg-green-600' : 'bg-green-500 hover:bg-green-600'} text-white text-lg font-medium rounded-lg transition-all ${isSpeaking && 'shadow-sm'} hover:shadow-lg`} onClick={speakHandler} disabled={isSpeaking}>
+                <button className={` ${isSpeaking ? "px-4" : "px-5"} py-2  bg-blue-400 text-white rounded-md hover:bg-blue-200 transition-all ${isSpeaking ? 'bg-green-500 hover:bg-green-600' : 'bg-green-500 hover:bg-green-600'} text-white text-lg font-medium rounded-lg transition-all ${isSpeaking && 'shadow-sm'} hover:shadow-lg`} onClick={speakHandler} disabled={isSpeaking}>
                   {isSpeaking ? <SpeakerAnimation2 /> : <div className="flex justify-center items-center"><Volume2 size={24} stroke="white" fill="white" /></div>}
                 </button>
 
@@ -418,7 +425,7 @@ const Chatbot = () => {
         </div>
         {/* main content ends */}
         {/* history */}
-        <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px] h-[600px] sm:h-[700px] md:h-[800px] overflow-y-auto p-4 sm:p-6 mt-6 sm:mt-9 space-y-4 sm:space-y-6 border border-gray-700 rounded-lg shadow-lg bg-gray-900 text-white scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px] h-[600px] sm:h-[700px] md:h-[800px] overflow-y-auto p-4 sm:p-6 mt-6 sm:mt-9 space-y-4 sm:space-y-6 border border-gray-700 rounded-lg shadow-lg bg-gray-900 text-white scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 z-10">
 
           {/* Heading */}
           <div className="p-6 border-b border-gray-700 bg-gray-900">
