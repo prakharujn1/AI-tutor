@@ -13,6 +13,7 @@ import StudentAnimation from '../components/StudentAnimation';
 import { Volume2, VolumeXIcon } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import "./style.css";
+// import { useSpeechSynthesis } from "react-speech-kit";
 import SpeakerAnimation2 from "../components/SpeakerAnimation2";
 
 
